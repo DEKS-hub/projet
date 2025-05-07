@@ -1,6 +1,6 @@
-const { validationResult } = require('express-validator');
-const { registerUser, loginUser } = require('../models/User'); // Importe les fonctions du modèle
-const { generateToken } = require('../utils/auth'); // Fonction pour générer les JWT
+import { validationResult } from 'express-validator';
+import { registerUser, loginUser } from '../models/User.js'; // Ajoutez l'extension .js si nécessaire
+import { generateToken } from '../utils/auth.js'; // Ajoutez l'extension .js si nécessaire
 
 const authControl = { // Assurez-vous que le nom correspond à celui utilisé dans vos routes
   register: async (req, res, next) => {
@@ -34,4 +34,4 @@ const authControl = { // Assurez-vous que le nom correspond à celui utilisé da
   //  Ajoute d'autres fonctions pour la vérification d'email, etc.
 };
 
-module.exports = authControl; // Exportez bien l'objet contrôleur
+export default authControl; // Exportez bien l'objet contrôleur
