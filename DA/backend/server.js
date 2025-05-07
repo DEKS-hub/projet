@@ -1,7 +1,6 @@
 import express from 'express';
 import mysql from 'mysql2';
 import bcrypt from 'bcrypt';
-import twilio from 'twilio';
 
 const app = express();
 const port = 3000;
@@ -108,37 +107,7 @@ app.post('/api/forgot-password', (req, res) => {
   });
 });
 
-// Route pour envoyer un code de vérification
-const twilioClient = twilio('TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN');
-const twilioPhoneNumber = 'TWILIO_PHONE_NUMBER';
 
-app.post('/api/send-verification-code', async (req, res) => {
-  const { phone_number } = req.body;
-
-  if (!phone_number) {
-    return res.status(400).json({ message: 'Numéro de téléphone requis.' });
-  }
-
-  const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
-
-  try {
-    const message = await twilioClient.messages.create({
-      body: `Votre code de vérification pour l'application est : ${verificationCode}`,
-      to: phone_number,
-      from: twilioPhoneNumber,
-    });
-
-    console.log(`SMS envoyé à ${phone_number} avec le SID: ${message.sid}`);
-
-    // Stocker le code de vérification en base de données ou dans un cache
-    // Exemple : await VerificationCode.create({ phoneNumber: phone_number, code: verificationCode, expiresAt: Date.now() + 300000 });
-
-    res.status(200).json({ message: 'Code de vérification envoyé.' });
-  } catch (error) {
-    console.error('Erreur lors de l\'envoi du SMS:', error);
-    res.status(500).json({ message: 'Erreur lors de l\'envoi du code de vérification.' });
-  }
-});
 
 // Démarrer le serveur
 app.listen(port, '0.0.0.0', () => {
